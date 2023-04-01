@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cloudflared
+data:
+  config.yaml: |
+    # Name of the tunnel you want to run
+    tunnel: b9788e19-e55f-41f7-bd43-867b8bcbfd4e
+    credentials-file: /etc/cloudflared/creds/credentials.json
+    metrics: 0.0.0.0:2000
+    no-autoupdate: true
+    ingress:
+    - hostname: kuma.manudev.dev
+      service: http://uptime-kuma.default:3001
+    - hostname: grafana.manudev.dev
+      service: http://kube-prometheus-stack-1680300050-grafana.monitoring:80
+    - hostname: hello.manudev.dev
+      service: http://kourier-internal.knative-serving.svc.cluster.local
+      originRequest:
+        httpHostHeader: helloworld-go.default.192.168.4.160.sslip.io
+    - service: http_status:404
